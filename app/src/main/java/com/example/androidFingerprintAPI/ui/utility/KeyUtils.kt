@@ -38,6 +38,28 @@ object KeyUtils {
         val privateKey: PrivateKey = keyStore2.getKey(KEY_NAME, null) as PrivateKey
 
         Log.d("PrivateKey", "Private Key: $privateKey")
+    }
 
+    fun startListening() {
+//        val signature: Signature = Signature.getInstance("SHA256withECDSA")
+//        val keyStore = KeyStore.getInstance("AndroidKeyStore")
+//        keyStore.load(null)
+//        val key = keyStore.getKey(KEY_NAME, null) as PrivateKey
+//        signature.initSign(key)
+//
+//        val cryptObject: CryptoObject =
+//            FingerprintManager.CryptoObject(signature)
+//
+//        val cancellationSignal: CancellationSignal = CancellationSignal()
+//        val fingerprintManager: FingerprintManager =
+//            context.getSystemService(FingerprintManager::class.java)
+//
+//        fingerprintManager.authenticate(
+//            cryptObject,
+//            cancellationSignal,
+//            0,
+//            this,
+//            null
+//        )
     }
 }
