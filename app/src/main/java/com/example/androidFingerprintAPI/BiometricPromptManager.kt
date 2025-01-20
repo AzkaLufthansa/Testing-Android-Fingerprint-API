@@ -1,12 +1,14 @@
 package com.example.androidFingerprintAPI
 
 import android.os.Build
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import androidx.biometric.BiometricPrompt
 import androidx.biometric.BiometricPrompt.PromptInfo
+import com.example.androidFingerprintAPI.ui.utility.KeyUtils
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 
@@ -64,7 +66,22 @@ class BiometricPromptManager(
 
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     super.onAuthenticationSucceeded(result)
-                    resultChannel.trySend(BiometricResult.AuthenticationSuccess)
+
+                    // Generate keystore
+                    KeyUtils.generateKeyPair()
+
+                    // Payload that will be signed
+                    val payload = "Your data to sign".toByteArray()
+
+                    val signedPayload = KeyUtils.signPayload(payload)
+                    Log.d("SIGNED PAYLOAD PRINT", signedPayload.toString())
+
+                    if (signedPayload != null) {
+                        // Send payload to server
+                        resultChannel.trySend(BiometricResult.AuthenticationSuccess)
+                    } else {
+                        resultChannel.trySend(BiometricResult.AuthenticationError("Failed to sign payload"))
+                    }
                 }
 
                 override fun onAuthenticationFailed() {
